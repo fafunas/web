@@ -1,8 +1,7 @@
-from pydantic import BaseModel
+import reflex as rx
 from typing import Optional
 
-class Product(BaseModel):
-    id : Optional[str] = None
-    name : str
-    price : int
-    status : bool
+class Products(rx.Model, table=True):
+    name : str 
+    price : int 
+    status : bool 
