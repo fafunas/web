@@ -1,8 +1,10 @@
 import reflex as rx
 from web.components.sidebar import sidebar
 from web.components.product_button import product_button
+from ..components.callout import notification
 from ..views.table import product_table
-from ..state.productState import ProductState
+from ..states.productState import ProductState
+
 
 
 @rx.page(
@@ -22,6 +24,6 @@ def products()-> rx.Component:
             product_button(),
             product_table(ProductState.products),
             spacing="5",
-        )
-        
+        ),
+            
     )

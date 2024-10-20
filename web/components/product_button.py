@@ -1,9 +1,5 @@
 import reflex as rx
-#from ..state.productState import ProductState
-
-#class FormState(rx.State):
-#    form_data={}
-
+from ..states.productState import ProductState
 
 def product_button()-> rx.Component:
     return rx.dialog.root(
@@ -43,15 +39,25 @@ def product_button()-> rx.Component:
                                 required=True
                             )
                         ),
-                        rx.dialog.close(
+                        rx.hstack(
+                            rx.dialog.close(
                             rx.button(
                             "Agregar", type="submit",
                         )
+                        ),
+                        rx.dialog.close(
+                            rx.button(
+                                "Cancelar",
+                                variant="soft",
+                                color_scheme="gray",
+                            )
+                        )
                         )
                         
+                        
                     ),
-                   # on_submit=ProductState.handle_submit,  # Esto pasa los datos del formulario a handle_submit
-                   # reset_on_submit=False
+                   on_submit=ProductState.createProduct,  # Esto pasa los datos del formulario a handle_submit
+                   #reset_on_submit=False
                 )
             )
         )
