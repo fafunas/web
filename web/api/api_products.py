@@ -8,7 +8,8 @@ def getAllProducts():
     with Session(engine) as session:
         query = select(Products)
         return session.exec(query).all()
-    
+
+#Crea producto nuevo   
 def createProduct(product:Products):
     engine= connect()
     with Session(engine) as session:
@@ -17,11 +18,34 @@ def createProduct(product:Products):
         query = select(Products)
         return session.exec(query).all()
     
-    
+#Recupera un producto por nombre   
 def getProductbyName(product:str):
     engine= connect()
     with Session(engine) as session:
         query= select(Products).where(Products.name==product)
         return session.exec(query).all()
     
+
+#Eliminar Producto
+
+def deleteProduct(id:int):
+    engine= connect()
+    with Session(engine) as session:
+        product= session.exec(select(Products).where(Products.id==id)).first()
+        session.delete(product)
+        session.commit()
+        
     
+#Actualziar Producto
+
+def updateProduct(id:int, product:Products):
+    engine=connect()
+    with Session(engine) as session:
+        updateProd = session.exec(select(Products).where(Products.id==id)).first()
+        updateProd.name = product.name
+        updateProd.price = product.price
+        session.add(updateProd)
+        session.commit()
+        session.refresh(updateProd)
+        
+

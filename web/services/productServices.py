@@ -1,6 +1,6 @@
 ##Validaciones
 
-from ..api.api_products import getAllProducts, createProduct, getProductbyName
+from ..api.api_products import getAllProducts, createProduct, getProductbyName, deleteProduct, updateProduct
 from ..models.product_model import Products
 
 
@@ -22,3 +22,15 @@ def createProductService(name:str,price:int):
         return createProduct(new_product)
     else:
         raise BaseException("El usuario ya existe")
+    
+def deleteProductservice(id:int):
+    return deleteProduct(id=id)
+
+def updateProductService(id:int,name:str, price:int):
+    try:
+        updateProd = Products(name=name,price=price)#Convierto al obj del modelo
+    # print(updateProd,id)
+        return updateProduct(id,updateProd)
+    except:
+        raise BaseException("El usuario ya existe")
+        
