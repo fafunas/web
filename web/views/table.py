@@ -3,20 +3,22 @@ from ..models.product_model import Products
 from ..states.productState import ProductState
 
 
+
 def product_table(list_product: list[Products]) -> rx.Component:
     return rx.table.root(
         rx.table.header(
             rx.table.row(
-                rx.table.column_header_cell("Producto"),
+                rx.table.column_header_cell("Productso"),
                 rx.table.column_header_cell("Precio"),
                 rx.table.column_header_cell("Accion")
             )
         ),
         rx.table.body(
-            rx.foreach(list_product, row_table)
-        )
+            rx.foreach(list_product, row_table),
+           )
     )
-    
+
+
 def row_table(product:Products)-> rx.Component:
     return rx.table.row(
         rx.table.cell(product.name),
@@ -58,7 +60,7 @@ def dialogDelete(item)-> rx.Component:
                     rx.button(
                         "Eliminar",
                         type="submit",
-                        on_click= lambda: ProductState.deleteProduct(item.id),
+                        #on_click= lambda: ProductState.deleteProduct(item.id),
                         ),
                     ),
                 spacing="3",
@@ -86,7 +88,7 @@ def dialogUpdate(item)-> rx.Component:
                 margin_bottom="4px",
                 weight="bold",
             ),
-                    rx.el.input(type="hidden",name="id",value=item.id),
+                   # rx.el.input(type="hidden",name="id",value=item.id),
                     rx.input(
                         default_value=item.name,
                         name="name",
@@ -122,7 +124,7 @@ def dialogUpdate(item)-> rx.Component:
                 spacing="3",
                 justify="end",
                 ),
-            on_submit=ProductState.updateProduct,
+           # on_submit=ProductState.updateProduct,
             direction="column",
             spacing="3",
                 )
