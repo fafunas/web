@@ -57,7 +57,7 @@ def product_button()-> rx.Component:
                         
                     ),
                    on_submit=ProductState.createProduct,  # Esto pasa los datos del formulario a handle_submit
-                   #reset_on_submit=False
+                   reset_on_submit=False
                 )
             )
         )

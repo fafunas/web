@@ -1,13 +1,11 @@
-from sqlmodel import create_engine
+from pymongo import MongoClient
 import os
 import dotenv
 
 dotenv.load_dotenv()
 
-USER = os.environ.get("user")
-PASSWORD = os.environ.get("pass")
-DBNAME = os.environ.get("dbname")
+USER = os.environ.get("MONGOUSR")
+PASSWORD = os.environ.get("MONGOPASS")
+DATABASE = os.environ.get("dbname")
 
-def connect():
-    engine = create_engine(f"postgresql+psycopg2://{USER}:{PASSWORD}@localhost:5432/{DBNAME}")
-    return engine
+db_client = MongoClient(f"mongodb+srv://{USER}:{PASSWORD}@cluster0.rycij.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").cervesia

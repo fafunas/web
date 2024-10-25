@@ -1,36 +1,48 @@
 ##Validaciones
-
-from ..api.api_products import getAllProducts, createProduct, getProductbyName, deleteProduct, updateProduct
+from ..config.db import db_client
+from ..schemas.products_schema import products_schema,product_schema
+from bson import ObjectId
 from ..models.product_model import Products
 
 
-def getProductsService():
-    product = getAllProducts()
-    return product
+#Recupero todos los productos de la base
+def getAllProductsServices():
+    product = db_client.products.find()
+    return products_schema(product)
 
 
-def selectProductbyName(product:str):
-    if(len(product)!=0):
-        return getProductbyName(product)
-    else:
-        return getAllProducts()
+#Crear nuevo registro
 
-def createProductService(name:str,price:int):
-    product= getProductbyName(name)
-    if (len(product)==0):
-        new_product = Products(name=name,price=price)
-        return createProduct(new_product)
-    else:
-        raise BaseException("El usuario ya existe")
+def createProductService(item):
+    print(item)
     
-def deleteProductservice(id:int):
-    return deleteProduct(id=id)
+    if(type(findProduct(item)))==Products:
+        raise Exception("El producto ya existe")
+    
+    uid = db_client.products.insert_one(item).inserted_id
+    print(f"Se ingreso correctamente con el id{uid}")
+    getAllProductsServices()
+    
+#Actualiza un registro (En este caso solo actualizamos precio)    
+def updateProductService(data={}):
+    uid=data.pop("id") #Extraigo el ID de data
+    updateProduct = db_client.products.update_one({"_id":ObjectId(uid)},{"$set":data}) #Debo convertir el uid a ObjectId para que Mongo lo reconozca y le paso el resto de data
+    return updateProduct
 
-def updateProductService(id:int,name:str, price:int):
+
+#Funcion para recuperar un producto
+def findProduct(data:dict):
     try:
-        updateProd = Products(name=name,price=price)#Convierto al obj del modelo
-    # print(updateProd,id)
-        return updateProduct(id,updateProd)
+        field, key = list(data.items())[0]  # Extrae el primer par clave-valor del diccionario
+        query = {field: {"$regex": f"^{key}$", "$options": "i"}} #expresión regular insensible a mayúsculas
+        product= db_client.products.find_one(query)
+        return Products(**product_schema(product))
     except:
-        raise BaseException("El usuario ya existe")
+        print("No se encuentra el producto")
         
+#Eliminar producto
+
+def deleteProductServices(data={}):
+    uid= data.pop("id")
+    deleteProduct = db_client.products.delete_one({"_id":ObjectId(uid)})
+    return deleteProduct
