@@ -8,7 +8,7 @@ def product_table(list_product: list[Products]) -> rx.Component:
     return rx.table.root(
         rx.table.header(
             rx.table.row(
-                rx.table.column_header_cell("Productso"),
+                rx.table.column_header_cell("Productos"),
                 rx.table.column_header_cell("Precio"),
                 rx.table.column_header_cell("Accion")
             )
@@ -60,7 +60,7 @@ def dialogDelete(item)-> rx.Component:
                     rx.button(
                         "Eliminar",
                         type="submit",
-                        #on_click= lambda: ProductState.deleteProduct(item.id),
+                        on_click= lambda: ProductState.deleteProduct(item),
                         ),
                     ),
                 spacing="3",
@@ -88,7 +88,7 @@ def dialogUpdate(item)-> rx.Component:
                 margin_bottom="4px",
                 weight="bold",
             ),
-                   # rx.el.input(type="hidden",name="id",value=item.id),
+                    rx.el.input(type="hidden",name="id",value=item["id"].to(str)),
                     rx.input(
                         default_value=item.name,
                         name="name",
@@ -124,7 +124,7 @@ def dialogUpdate(item)-> rx.Component:
                 spacing="3",
                 justify="end",
                 ),
-           # on_submit=ProductState.updateProduct,
+            on_submit=ProductState.updateProduct,
             direction="column",
             spacing="3",
                 )
