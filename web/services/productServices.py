@@ -5,6 +5,7 @@ from bson import ObjectId
 from ..models.product_model import Products
 
 
+
 #Recupero todos los productos de la base
 def getAllProductsServices():
     product = db_client.products.find()
@@ -14,12 +15,16 @@ def getAllProductsServices():
 #Crear nuevo registro
 
 def createProductService(item):
-    print(item)
     
-    if(type(findProduct(item)))==Products:
+    print(findProduct(item))
+    if type(findProduct(item))==Products:
         raise Exception("El producto ya existe")
     
-    uid = db_client.products.insert_one(item).inserted_id
+    newProduct=Products(**item) #Hago esto para agregar el campo status
+    product_dict= dict(newProduct)
+    del product_dict["id"]
+    
+    uid= db_client.products.insert_one(product_dict).inserted_id
     print(f"Se ingreso correctamente con el id{uid}")
     getAllProductsServices()
     
@@ -36,7 +41,7 @@ def findProduct(data:dict):
         field, key = list(data.items())[0]  # Extrae el primer par clave-valor del diccionario
         query = {field: {"$regex": f"^{key}$", "$options": "i"}} #expresión regular insensible a mayúsculas
         product= db_client.products.find_one(query)
-        return Products(**product_schema(product))
+        return Products(**product)
     except:
         print("No se encuentra el producto")
         
@@ -46,3 +51,4 @@ def deleteProductServices(data={}):
     uid= data.pop("id")
     deleteProduct = db_client.products.delete_one({"_id":ObjectId(uid)})
     return deleteProduct
+

@@ -1,10 +1,9 @@
 #Al recibir un prodcuto devolvere un dict para trabajarlo
-def product_schema(product)-> dict:
+def product_schema(shift)-> dict:
     return {
-        "id" : str(product["_id"]),
-        "name": product["name"],
-        "price": product["price"],
-        "status": product["status"]
+        "id" : str(shift["_id"]),
+        "start_time": shift["start_time"],
+        "end_time": shift["end_time"]
     }
     
 #Recibo varios productos y devuelvo una lista de todo    
