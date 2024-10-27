@@ -6,7 +6,8 @@ from ..views.dashboard_view import dashboard
 
 @rx.page(
     title="Dashboard Cervesia",
-    description="Festival Rico"
+    description="Festival Rico",
+    on_load=DashboardState.on_load()
     
 )
 
@@ -15,7 +16,7 @@ def index() -> rx.Component:
         sidebar(),
         rx.cond(
             DashboardState.shift_status,
-            rx.box(dashboard()),
+            rx.flex(dashboard()),
             rx.box(
                 rx.flex(
                     shift_form(),
@@ -27,7 +28,7 @@ def index() -> rx.Component:
                 display="flex",  # Configura el contenedor para usar flex
                 alignItems="center",  # Centra verticalmente
                 justifyContent="center",  # Centra horizontalmente
-            )
+            ),
         ),
         spacing="0",
         width="100%",

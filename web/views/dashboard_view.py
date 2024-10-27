@@ -1,9 +1,16 @@
 import reflex as rx
 from web.components.card import card
+from ..states.dashboardState import DashboardState
 
 
 def dashboard()-> rx.Component:
     return rx.vstack(
+        rx.hstack(
+    rx.button("Cerrar Turno",
+              on_click=DashboardState.closeShift()),
+    width="100%",
+    justify="end"
+),
             # Contenedor para los cards
             rx.hstack(
                 card("loader", "En Preparacion", "yellow"),

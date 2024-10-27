@@ -15,8 +15,6 @@ def getAllProductsServices():
 #Crear nuevo registro
 
 def createProductService(item):
-    
-    print(findProduct(item))
     if type(findProduct(item))==Products:
         raise Exception("El producto ya existe")
     
