@@ -45,3 +45,4 @@ def lastShift()->int:
 def checkOpenShiftStatusService()->bool:
     last = lastShift()
     return last["status"]
+

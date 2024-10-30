@@ -1,9 +1,14 @@
 import reflex as rx
 from web.components.card import card
+from ..components.newOrderButton import orderProduct
 from ..states.dashboardState import DashboardState
+#from ..states.productState import ProductState
+from ..models.product_model import Products
 
 
-def dashboard()-> rx.Component:
+
+
+def dashboard(products:Products)-> rx.Component:
     return rx.vstack(
         rx.hstack(
     rx.button("Cerrar Turno",
@@ -20,11 +25,9 @@ def dashboard()-> rx.Component:
                 justify="space-between",
                 width="100%"
             ),
-            # Margen entre los cards y la tabla
-            rx.box(height="2em"),  # Para crear espacio entre los elementos
-            # Contenedor para la tabla (centrado)
-            rx.heading("TABLA", text_align="center"),
-            rx.box(
+            rx.vstack(
+              orderProduct(products),  
+              rx.box(
                 # Aquí se pondría la tabla (ejemplo de tabla vacía por ahora)
                 rx.table.root(
     rx.table.header(
@@ -61,6 +64,7 @@ def dashboard()-> rx.Component:
                 border="1px solid lightgray",
                 border_radius="md",
                 box_shadow="md"
+            ),
             ),
             # Ajustes de margenes y alineación de los elementos en vertical
             spacing="2em",
