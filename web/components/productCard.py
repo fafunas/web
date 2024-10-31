@@ -7,7 +7,8 @@ def ProductCard(item:Products)-> rx.Component:
         rx.flex(
             rx.form.field(
                 rx.flex(
-                    #rx.el.input(type="hidden",name=f"id_{item.id}",value=item.id.to(str)),
+                    rx.el.input(type="hidden",name=f"price_{item.id}",value=item.price.to(str)),
+                    rx.el.input(type="hidden",name=f"name.{item.id}",value=item.name),
                     rx.text(item.name),
                     rx.form.control(
                         rx.input(

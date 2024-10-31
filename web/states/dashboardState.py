@@ -1,7 +1,7 @@
 import reflex as rx
 from ..services.shiftServices import startShiftServices, getAllShiftsServices,endShiftServices,checkOpenShiftStatusService
 from ..services.productServices import getAllProductsServices
-from ..services.dashboardServices import cleanData
+from ..services.dashboardServices import cleanData, createOrderServices
 from ..models.product_model import Products
 
 
@@ -9,15 +9,28 @@ class DashboardState(rx.State):
     shift_status:bool 
     products: list[Products] = []
     order_data: dict = {}
-    item_selected:str=""
-
-    def set_value(self, value):
-        self.value = value
+    openedDialog: bool = False
+    productconfirm: list[dict]=[]
+    
+    def closeDialog(self):
+        self.openedDialog=False
+    
         
     def handle_submit(self,data={}):
+        #print(data)
         items=cleanData(data)
-       # items["ornder"]=1
-        print(items)
+        self.productconfirm = items.productos
+        self.order_data=items
+        print(self.productconfirm)
+        #print(self.order_data)
+        self.openedDialog = True
+        
+    @rx.background
+    async def createOrder(self):
+        async with self:
+            createOrderServices(self.order_data)
+            self.openedDialog = False
+            
     
     @rx.background
     async def startShift(self):
