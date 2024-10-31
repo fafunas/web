@@ -12,4 +12,4 @@ class Order(rx.Model):
     created_at: datetime =Field(default_factory=get_current_time)
     finish_time: Optional[datetime]=None
     total: int
-    items : list
+    productos : list
