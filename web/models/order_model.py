@@ -11,5 +11,7 @@ class Order(rx.Model):
     id:Optional[ObjectId] = Field(default=None,alias="_id")
     created_at: datetime =Field(default_factory=get_current_time)
     finish_time: Optional[datetime]=None
+    pickUp_time: Optional[datetime]=None
     total: int
     productos : list
+    shift_num: Optional[ObjectId]=None

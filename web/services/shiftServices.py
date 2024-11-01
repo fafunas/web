@@ -17,7 +17,7 @@ def startShiftServices():
 
     
     
-def checkTotalShifts()->int:
+def checkTotalShifts()->int: #Tomo el ultimo shift y le suma uno para incrementar
     last_shift= lastShift()
     #print("Last Shifl",last_shift)
     return (last_shift["shift_num"] + 1) if last_shift else 1
@@ -36,7 +36,7 @@ def getAllShiftsServices():
         
         #return shifts_schema(shifts)
         
-def lastShift()->int:
+def lastShift()->int:#Retorna el valor del ultimo turno
     last_shift = db_client.shifts.find_one(
             sort=[("shift_num", -1)]  # -1 para orden descendente
         )
@@ -45,4 +45,5 @@ def lastShift()->int:
 def checkOpenShiftStatusService()->bool:
     last = lastShift()
     return last["status"]
+
 

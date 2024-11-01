@@ -1,6 +1,7 @@
 from ..models.order_model import Order
 from ..config.db import db_client
 from bson import ObjectId
+from ..services.shiftServices import lastShift
 
 
 #Funcion para armar los items que se reciben por el formulario
@@ -30,7 +31,7 @@ def cleanData(data={}):
                 id = key.split('_')[1]
                 quantity = int(value)
                 if quantity > 0:
-                    price = prices.get(id, 0)
+                    price = prices.get(id, 0) #Sino encuentra el ID retorna 0
                     name = names.get(id,0)
                     subtotal = price * quantity
                     total += subtotal
@@ -46,11 +47,14 @@ def cleanData(data={}):
         return newOrder
     except BaseException as be:
         print(be)
+        
         return []
     
 
 
-def createOrderServices(item):
+def createOrderServices(item:Order):
+    shift = lastShift()
+    item.shift_num=ObjectId(shift["_id"])
     newOrder = dict(item)
     del newOrder["id"]
     try:

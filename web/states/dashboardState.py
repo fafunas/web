@@ -17,12 +17,9 @@ class DashboardState(rx.State):
     
         
     def handle_submit(self,data={}):
-        #print(data)
         items=cleanData(data)
         self.productconfirm = items.productos
         self.order_data=items
-        print(self.productconfirm)
-        #print(self.order_data)
         self.openedDialog = True
         
     @rx.background
