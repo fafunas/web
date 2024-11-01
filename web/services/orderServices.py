@@ -1,7 +1,8 @@
 from ..models.order_model import Order
 from ..config.db import db_client
 from bson import ObjectId
-from ..services.shiftServices import lastShift
+from ..schemas.order_schema import orders_schema
+from .shiftServices import lastShift
 
 
 #Funcion para armar los items que se reciben por el formulario
@@ -63,3 +64,28 @@ def createOrderServices(item:Order):
     except BaseException as be:
         print(be)
         
+
+def getAllOrdersServices():
+    query = [
+    {
+        '$match': {
+            'pickUp_time': None
+        }
+    }, {
+        '$lookup': {
+            'from': 'shifts', 
+            'localField': 'shift_num', 
+            'foreignField': '_id', 
+            'as': 'shift_info'
+        }
+    }, {
+        '$addFields': {
+            'shift_num': '$shift_info.shift_num', 
+            'shift_info': '$$REMOVE'
+        }
+    }
+    ]
+    
+    orders = orders_schema(db_client.orders.aggregate(query))
+    return orders
+

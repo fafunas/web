@@ -13,7 +13,7 @@ def dashboard(products:Products)-> rx.Component:
     return rx.vstack(
         rx.hstack(
             rx.button("Cerrar Turno",
-                      on_click=DashboardState.closeShift()),
+                      on_click=DashboardState.getallOrders()),
             width="100%",
             justify="end"
             ),
