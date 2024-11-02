@@ -2,7 +2,7 @@ from ..models.order_model import Order
 from ..config.db import db_client
 from bson import ObjectId
 from ..schemas.order_schema import orders_schema
-from .shiftServices import lastShift
+from .shiftServices import lastShift, updateOrderNum
 
 
 #Funcion para armar los items que se reciben por el formulario
@@ -55,12 +55,15 @@ def cleanData(data={}):
 
 def createOrderServices(item:Order):
     shift = lastShift()
+    order_num = int(shift["orders"])
     item.shift_num=ObjectId(shift["_id"])
+    item.nro_order= order_num
     newOrder = dict(item)
     del newOrder["id"]
     try:
         uid= db_client.orders.insert_one(newOrder).inserted_id
         print(f"Se ingreso correctamente con el id{uid}")
+        updateOrderNum()# Si se agrega la order incremento
     except BaseException as be:
         print(be)
         

@@ -13,4 +13,5 @@ class Shift(rx.Model):
     start_time: datetime = Field(default_factory=get_current_time)
     end_time: Optional[datetime] = None
     status: bool = True
+    orders: int= Field(default=1)
 

@@ -3,7 +3,6 @@ from web.components.card import card
 from ..components.newOrderButton import orderProduct, orderForm
 from ..components.dashboardTable import dashboardTable
 from ..states.dashboardState import DashboardState
-#from ..states.productState import ProductState
 from ..models.product_model import Products
 
 
@@ -13,7 +12,7 @@ def dashboard(products:Products)-> rx.Component:
     return rx.vstack(
         rx.hstack(
             rx.button("Cerrar Turno",
-                      on_click=DashboardState.getallOrders()),
+                      on_click=DashboardState.closeShift),
             width="100%",
             justify="end"
             ),

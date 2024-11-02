@@ -5,7 +5,8 @@ def shift_schema(shift)-> dict:
         "start_time": shift["start_time"],
         "shift_num": shift["shift_num"],
         "end_time": shift["end_time"],
-        "status": shift["status"]
+        "status": shift["status"],
+        "orders": shift["orders"]
     }
     
 #Recibo varios productos y devuelvo una lista de todo    

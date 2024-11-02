@@ -46,4 +46,15 @@ def checkOpenShiftStatusService()->bool:
     last = lastShift()
     return last["status"]
 
+def updateOrderNum():
+    order = lastShift()
+    uid= ObjectId(order["_id"])
+    try:
+        db_client.shifts.find_one_and_update({"_id":uid},{"$inc":{"orders":1}})
+    except BaseException as be:
+        print(be)
+
+    
+
+
 

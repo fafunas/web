@@ -15,3 +15,4 @@ class Order(rx.Model):
     total: int
     productos : list
     shift_num: Optional[ObjectId]=None
+    nro_order: Optional[int] = Field(default=1)
