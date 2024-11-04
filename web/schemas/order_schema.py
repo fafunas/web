@@ -10,6 +10,14 @@ def orderSchema(order)->dict: #Usamos este esquema solo para visualizar la tabla
         "productos": process_products(order["productos"])      
     }
     
+
+def cardStatusSchema(order)->dict:
+    try:
+        neworder= list(order)
+        return neworder[0]
+    except:
+        return {}
+
     
 def process_products(productos):
     return [{key: value for key, value in producto.items() if key != 'product'} for producto in productos]

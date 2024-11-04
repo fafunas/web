@@ -1,7 +1,7 @@
 import reflex as rx
-from ..services.shiftServices import startShiftServices, getAllShiftsServices,endShiftServices,checkOpenShiftStatusService
+from ..services.shiftServices import startShiftServices, endShiftServices,checkOpenShiftStatusService
 from ..services.productServices import getAllProductsServices
-from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime
+from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
 from ..models.product_model import Products
 from ..models.dashboardModel import OrderType
 
@@ -13,6 +13,7 @@ class DashboardState(rx.State):
     order_data: dict = {}
     openedDialog: bool = False
     productconfirm: list[dict]=[]
+    statusCards: dict={}
     
     def closeDialog(self):
         self.openedDialog=False
@@ -24,15 +25,13 @@ class DashboardState(rx.State):
         self.order_data=items
         self.openedDialog = True
         
-    def getItem(self,order,name):
-        print(order,name)
-        
     @rx.background
     async def createOrder(self):
         async with self:
             createOrderServices(self.order_data)
             self.openedDialog = False
             self.orderTable= getAllOrdersServices()
+            self.statusCards = getDataCard()
             
     
     @rx.background
@@ -40,6 +39,7 @@ class DashboardState(rx.State):
         async with self:
             startShiftServices()
             self.shift_status= True
+            self.statusCards = getDataCard()
     
     
     @rx.background
@@ -47,6 +47,8 @@ class DashboardState(rx.State):
         async with self:
             self.shift_status=False
             endShiftServices()
+            self.statusCards = getDataCard()
+   
             
     @rx.background
     async def on_load(self):
@@ -54,10 +56,13 @@ class DashboardState(rx.State):
             self.shift_status= checkOpenShiftStatusService()
             self.products= getAllProductsServices()
             self.orderTable= getAllOrdersServices()
+            self.statusCards = getDataCard()
             
     @rx.background
     async def UpdateItem(self,id,field: str):
         async with self:
             updateFinishtime(id,field)
             self.orderTable= getAllOrdersServices()
+            self.statusCards = getDataCard()
                 
+            

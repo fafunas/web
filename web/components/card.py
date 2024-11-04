@@ -1,6 +1,6 @@
 import reflex as rx
 
-def card(icon:str,status:str,color:str)-> rx.Component:
+def card(icon:str,status:str,color:str,num:int=0)-> rx.Component:
     return rx.card(
         rx.hstack(
             rx.vstack(
@@ -25,7 +25,7 @@ def card(icon:str,status:str,color:str)-> rx.Component:
                 ),
                 rx.hstack(
                     rx.heading(
-                        "10",
+                        num,
                         size="7",
                         weight="bold",
                     ),

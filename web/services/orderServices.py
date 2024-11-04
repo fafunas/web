@@ -1,7 +1,7 @@
 from ..models.order_model import Order, get_current_time
 from ..config.db import db_client
 from bson import ObjectId
-from ..schemas.order_schema import orders_schema
+from ..schemas.order_schema import orders_schema, cardStatusSchema
 from .shiftServices import lastShift, updateOrderNum
 
 
@@ -101,3 +101,97 @@ def updateFinishtime(id,field):
     except BaseException as be:
         print(be)
     
+    
+def getDataCard():
+    shift = lastShift()
+    actualShift= shift["shift_num"]
+    
+    query = [
+    {
+        '$lookup': {
+            'from': 'shifts', 
+            'localField': 'shift_num', 
+            'foreignField': '_id', 
+            'as': 'shift_info'
+        }
+    }, {
+        '$match': {
+            'shift_info.shift_num': actualShift
+        }
+    }, {
+        '$group': {
+            '_id': None, 
+            'active': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$and': [
+                                {
+                                    '$eq': [
+                                        '$finish_time', None
+                                    ]
+                                }, {
+                                    '$eq': [
+                                        '$pickUp_time', None
+                                    ]
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }, 
+            'ready': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$and': [
+                                {
+                                    '$ne': [
+                                        '$finish_time', None
+                                    ]
+                                }, {
+                                    '$eq': [
+                                        '$pickUp_time', None
+                                    ]
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }, 
+            'total': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$and': [
+                                {
+                                    '$ne': [
+                                        '$created_at', None
+                                    ]
+                                }, {
+                                    '$ne': [
+                                        '$finish_time', None
+                                    ]
+                                }, {
+                                    '$ne': [
+                                        '$pickUp_time', None
+                                    ]
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }
+        }
+    }, {
+        '$project': {
+            '_id': 0, 
+            'active': 1, 
+            'ready': 1, 
+            'total': 1
+        }
+    }
+]
+    
+    cardsOrders = cardStatusSchema(db_client.orders.aggregate(query))
+    return cardsOrders

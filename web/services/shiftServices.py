@@ -1,7 +1,6 @@
 from ..config.db import db_client
 from ..models.shift_model import Shift
 from ..models.shift_model import get_current_time
-from datetime import datetime
 from ..schemas.shift_schema import shifts_schema
 from bson import ObjectId
 
@@ -22,6 +21,7 @@ def checkTotalShifts()->int: #Tomo el ultimo shift y le suma uno para incrementa
     #print("Last Shifl",last_shift)
     return (last_shift["shift_num"] + 1) if last_shift else 1
 
+#Actualiza el turno actual con el horario de finalizacion
 def endShiftServices():
     last_shift= lastShift()
     endTime= get_current_time()
@@ -29,23 +29,28 @@ def endShiftServices():
     print(uid)
     db_client.shifts.find_one_and_update({"_id":uid},{"$set":{"end_time":endTime,"status":False}})
     
-    
+ #Retorna todos los documentos de turnos   
 def getAllShiftsServices():
         shifts= db_client.shifts.find()
         print(shifts_schema(shifts))
         
         #return shifts_schema(shifts)
-        
-def lastShift()->int:#Retorna el valor del ultimo turno
+
+
+#Retorna el valor del ultimo turno        
+def lastShift()->int:
     last_shift = db_client.shifts.find_one(
             sort=[("shift_num", -1)]  # -1 para orden descendente
         )
     return last_shift
 
+
+#Retorna el status el ultimo shift
 def checkOpenShiftStatusService()->bool:
     last = lastShift()
     return last["status"]
 
+ #Funciona para ir incrementando el numero de ordenes por dia
 def updateOrderNum():
     order = lastShift()
     uid= ObjectId(order["_id"])
