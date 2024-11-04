@@ -1,4 +1,4 @@
-from ..models.order_model import Order
+from ..models.order_model import Order, get_current_time
 from ..config.db import db_client
 from bson import ObjectId
 from ..schemas.order_schema import orders_schema
@@ -92,3 +92,12 @@ def getAllOrdersServices():
     orders = orders_schema(db_client.orders.aggregate(query))
     return orders
 
+def updateFinishtime(id,field):
+    uid = ObjectId(id)
+    time = get_current_time()
+    
+    try:
+        db_client.orders.find_one_and_update({"_id":uid},{"$set":{field:time}})
+    except BaseException as be:
+        print(be)
+    

@@ -1,14 +1,15 @@
 import reflex as rx
 from ..services.shiftServices import startShiftServices, getAllShiftsServices,endShiftServices,checkOpenShiftStatusService
 from ..services.productServices import getAllProductsServices
-from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices
+from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime
 from ..models.product_model import Products
+from ..models.dashboardModel import OrderType
 
 
 class DashboardState(rx.State):
     shift_status:bool 
     products: list[Products] = []
-    oderTable: list =[{}]
+    orderTable: list[OrderType] = []
     order_data: dict = {}
     openedDialog: bool = False
     productconfirm: list[dict]=[]
@@ -23,19 +24,15 @@ class DashboardState(rx.State):
         self.order_data=items
         self.openedDialog = True
         
-    @rx.background
-    async def getallOrders(self):
-        async with self:
-            print( getAllOrdersServices())
-            #print(self.oderTable)
-            
-            
+    def getItem(self,order,name):
+        print(order,name)
         
     @rx.background
     async def createOrder(self):
         async with self:
             createOrderServices(self.order_data)
             self.openedDialog = False
+            self.orderTable= getAllOrdersServices()
             
     
     @rx.background
@@ -56,5 +53,11 @@ class DashboardState(rx.State):
         async with self:
             self.shift_status= checkOpenShiftStatusService()
             self.products= getAllProductsServices()
-   
-        
+            self.orderTable= getAllOrdersServices()
+            
+    @rx.background
+    async def UpdateItem(self,id,field: str):
+        async with self:
+            updateFinishtime(id,field)
+            self.orderTable= getAllOrdersServices()
+                

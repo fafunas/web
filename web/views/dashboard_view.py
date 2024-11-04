@@ -12,7 +12,8 @@ def dashboard(products:Products)-> rx.Component:
     return rx.vstack(
         rx.hstack(
             rx.button("Cerrar Turno",
-                      on_click=DashboardState.closeShift),
+                      on_click=DashboardState.closeShift
+                      ),
             width="100%",
             justify="end"
             ),
@@ -32,7 +33,7 @@ def dashboard(products:Products)-> rx.Component:
                     width="33%",
                     ),
                 rx.box(
-                    dashboardTable(),
+                    dashboardTable(DashboardState.orderTable),
                     width="67%",
                     ),
                 width="100%",
