@@ -21,9 +21,10 @@ def dashboard(products:Products)-> rx.Component:
             rx.hstack(
                 card("loader", "En Preparacion", "yellow",rx.cond(DashboardState.statusCards["active"],DashboardState.statusCards["active"],0)),
                 card("package", "Listo para retirar", "lightblue",rx.cond(DashboardState.statusCards["ready"], DashboardState.statusCards["ready"],0)),
-                card("check", "Completadas", "green",rx.cond(DashboardState.statusCards["total"],DashboardState.statusCards["total"],0)),
-                spacing="2em",
-                justify="space-between",
+                card("check", "Completadas", "#2A7E3B",rx.cond(DashboardState.statusCards["total"],DashboardState.statusCards["total"],0)),
+                spacing="1",
+                align="center",  
+                justify="between",
                 width="100%"
             ),
             rx.flex(

@@ -20,6 +20,7 @@ def createProductService(item):
     
     newProduct=Products(**item) #Hago esto para agregar el campo status
     product_dict= dict(newProduct)
+    product_dict["name"]=product_dict["name"].capitalize()
     del product_dict["id"]
     
     uid= db_client.products.insert_one(product_dict).inserted_id

@@ -26,8 +26,9 @@ def card(icon:str,status:str,color:str,num:int=0)-> rx.Component:
                 rx.hstack(
                     rx.heading(
                         num,
-                        size="7",
+                        size="8",
                         weight="bold",
+                        color=rx.color("gray", 11),
                     ),
                     spacing="2",
                     align_items="end",
@@ -43,5 +44,5 @@ def card(icon:str,status:str,color:str,num:int=0)-> rx.Component:
         size="3",
         width="100%",
         max_width="22rem",
-        background_color=color
+        background_color=(color)
     )

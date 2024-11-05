@@ -13,7 +13,7 @@ def orderProduct(list_product)-> rx.Component:
                     list_product,ProductCard
                 ),
                 columns="4",
-                spacing="3",
+                spacing="2",
                 width="100%"
             ),
             rx.hstack(
@@ -38,35 +38,44 @@ def orderForm() -> rx.Component:
             rx.dialog.description(
                 "Favor de confirmar la order",
                 size="2",
+                margin_bottom="16px"
             ),
-            rx.table.root(
-                rx.table.header(
-                    rx.table.row(
-                        rx.table.column_header_cell("Item"),
-                        rx.table.column_header_cell("Cantidad"),
-                    )
-                ),
-                rx.table.body(
-                    rx.foreach(
-                        DashboardState.productconfirm,
-                        lambda x: rx.table.row(
-                            rx.table.cell(rx.text(x["name"])),
-                            rx.table.cell(rx.text(x["quantity"])),
+            rx.inset(
+                rx.table.root(
+                    rx.table.header(
+                        rx.table.row(
+                            rx.table.column_header_cell("Item"),
+                            rx.table.column_header_cell("Cantidad"),
                         )
-                    )
-                )
+                    ),
+                    rx.table.body(
+                        rx.foreach(
+                            DashboardState.productconfirm,
+                            lambda x: rx.table.row(
+                                rx.table.cell(rx.text(x["name"])),
+                                rx.table.cell(rx.text(x["quantity"])),
+                            )
+                        )
+                    ),
+                ),
+                side="x",
+                margin_top="24px",
+                margin_bottom="24px",
             ),
             rx.text(
-                DashboardState.order_data.total),
-            
+                f"$ {DashboardState.order_data.total}",
+                size="2",
+                margin_bottom="4px",
+                weight="bold"
+            ),
             rx.flex(
                 rx.dialog.close(
                     rx.button(
                         "Cancel",
-                        variant="soft",
                         color_scheme="gray",
-                        on_click=DashboardState.closeDialog
+                        variant="soft",
                     ),
+                    on_click=DashboardState.closeDialog
                 ),
                 rx.dialog.close(
                     rx.button("Agregar"),
@@ -76,15 +85,13 @@ def orderForm() -> rx.Component:
                 margin_top="16px",
                 justify="end",
             ),
+            max_width="450px",
         ),
         open=DashboardState.openedDialog,
     )
     
-    
-    
-def row_table(item)-> rx.Component:
+def row_table(item) -> rx.Component:
     return rx.table.row(
-        rx.table.cell(item.name),
-        rx.table.cell(item.price),
-       )
-    
+        rx.table.cell(rx.text(item.name, size="2")),
+        rx.table.cell(rx.text(item.price, weight="bold")),
+    )

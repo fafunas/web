@@ -22,7 +22,7 @@ def product_table(list_product: list[Products]) -> rx.Component:
 def row_table(product:Products)-> rx.Component:
     return rx.table.row(
         rx.table.cell(product.name),
-        rx.table.cell(product.price),
+        rx.table.cell(f"$ {product.price}"),
         rx.table.cell(rx.hstack(
             dialogUpdate(product),
             dialogDelete(product),

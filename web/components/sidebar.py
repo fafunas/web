@@ -1,4 +1,6 @@
 import reflex as rx
+from ..styles.colors import Color
+
 
 def sidebar_item(
     text: str, icon: str, href: str
@@ -13,8 +15,8 @@ def sidebar_item(
             align="center",
             style={
                 "_hover": {
-                    "bg": rx.color("accent", 4),
-                    "color": rx.color("accent", 11),
+                    "bg": Color.CONTENT,
+                    "color": Color.WHITE,
                 },
                 "border-radius": "0.5em",
             },
@@ -43,13 +45,10 @@ def sidebar() -> rx.Component:
             rx.vstack(
                 rx.hstack(
                     rx.image(
-                        src="/logo.jpg",
-                        width="2.25em",
+                        src="/logo.png",
+                        #width="2.25em",
                         height="auto",
                         border_radius="25%",
-                    ),
-                    rx.heading(
-                        "Cervesia", size="7", weight="bold"
                     ),
                     align="center",
                     justify="start",
@@ -64,7 +63,7 @@ def sidebar() -> rx.Component:
                 # z_index="5",
                 padding_x="1em",
                 padding_y="1.5em",
-                bg=rx.color("accent", 3),
+                bg=Color.PRIMARY,
                 align="start",
                 # height="100%",
                 height="100vh",
@@ -95,7 +94,7 @@ def sidebar() -> rx.Component:
                         height="100%",
                         width="20em",
                         padding="1.5em",
-                        bg=rx.color("accent", 2),
+                        bg=Color.PRIMARY,
                     ),
                     width="100%",
                 ),
