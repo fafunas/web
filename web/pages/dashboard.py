@@ -24,8 +24,7 @@ def index() -> rx.Component:
                     align="center",
                     justify="center",
                 ),
-                width="100vh",  # Anchura completa de la pantalla
-                height="100vh",  # Altura completa de la ventana
+                width="100%",  
                 display="flex",  # Configura el contenedor para usar flex
                 alignItems="center",  # Centra verticalmente
                 justifyContent="center",  # Centra horizontalmente

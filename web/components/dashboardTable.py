@@ -52,16 +52,16 @@ def show_order(order: OrderType)-> rx.Component:
         rx.table.cell(
             rx.hstack(
                 rx.icon_button("check",
-                               color="green",
-                               background_color="white",
+                               color="white",
+                               background_color="green",
                                padding="0.5em",
                                border="1px solid black",
                                on_click=lambda: DashboardState.UpdateItem(order.id,"finish_time"),
                                ),
                 rx.cond(order.finish_time!= None,
                         rx.icon_button("package-check",
-                                       color="red",
-                                       background_color="white",
+                                       color="white",
+                                       background_color="red",
                                        padding="0.5em",
                                        border="1px solid black",
                                on_click=lambda: DashboardState.UpdateItem(order.id, "pickUp_time")),
@@ -70,5 +70,4 @@ def show_order(order: OrderType)-> rx.Component:
                 
         )
         ),
-       
     )

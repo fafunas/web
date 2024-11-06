@@ -32,7 +32,7 @@ def sidebar_items() -> rx.Component:
     return rx.vstack(
         sidebar_item("Dashboard", "layout-dashboard", "/#"),
         sidebar_item("Productos", "package-search", "/products"),
-        sidebar_item("Informes", "book-text", "/#"),
+        sidebar_item("Informes", "book-text", "/reports"),
         sidebar_item("Panel espera", "square-arrow-out-up-right", "/#"),
         spacing="1",
         width="100%",

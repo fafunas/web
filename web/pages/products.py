@@ -4,6 +4,9 @@ from web.components.product_button import product_button
 from ..components.callout import notification
 from ..views.table import product_table
 from ..states.productState import ProductState
+from ..styles.fonts import Font
+from ..styles.colors import TextColor
+from ..styles.styles import Size
 
 
 
@@ -19,7 +22,10 @@ def products()-> rx.Component:
         sidebar(),
         rx.vstack(
             rx.hstack(
-                rx.heading("Listado de Productos")
+                rx.heading("Listado de Productos",
+                           color=TextColor.HEADER,
+                           font_size=Size.BIG,
+                           margin=Size.MEDIUM)
             ),
             product_button(),
             product_table(ProductState.products),

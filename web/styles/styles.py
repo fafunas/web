@@ -58,5 +58,8 @@ BASE_STYLE = {
         "color": TextColor.BODY.value,
         "text_decoration": "none",
         "_hover": {}
+    },
+    rx.icon_button:{
+        "--cursor-button": "pointer",
     }
 }
