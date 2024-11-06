@@ -1,5 +1,5 @@
 import reflex as rx
-from ..services.shiftServices import startShiftServices, endShiftServices,checkOpenShiftStatusService
+from ..services.shiftServices import startShiftServices, endShiftServices,checkOpenShiftStatusService, getUnfinishdOrders
 from ..services.productServices import getAllProductsServices
 from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
 from ..models.product_model import Products
@@ -45,9 +45,10 @@ class DashboardState(rx.State):
     @rx.background
     async def closeShift(self):
         async with self:
-            self.shift_status=False
             endShiftServices()
-            self.statusCards = getDataCard()
+            #print(getUnfinishdOrders())
+            self.shift_status=False
+            #self.statusCards = getDataCard()
    
             
     @rx.background

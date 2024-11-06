@@ -23,11 +23,14 @@ def checkTotalShifts()->int: #Tomo el ultimo shift y le suma uno para incrementa
 
 #Actualiza el turno actual con el horario de finalizacion
 def endShiftServices():
-    last_shift= lastShift()
-    endTime= get_current_time()
-    uid=ObjectId(last_shift["_id"])
-    print(uid)
-    db_client.shifts.find_one_and_update({"_id":uid},{"$set":{"end_time":endTime,"status":False}})
+    if getUnfinishdOrders():
+        last_shift= lastShift()
+        endTime= get_current_time()
+        uid=ObjectId(last_shift["_id"])
+        print(uid)
+        db_client.shifts.find_one_and_update({"_id":uid},{"$set":{"end_time":endTime,"status":False}})
+    else:
+        raise Exception("Quedan ordenes abiertas")
     
  #Retorna todos los documentos de turnos   
 def getAllShiftsServices():
@@ -60,6 +63,21 @@ def updateOrderNum():
         print(be)
 
     
-
-
+def getUnfinishdOrders()->bool:
+    query=[
+    {
+        '$match': {
+            'pickUp_time': None
+        }
+    }
+    ]
+    order=db_client.orders.aggregate(query)
+    
+    if any(order):
+        return False
+    else:
+    # El cursor está vacío
+        return True
+    
+    
 

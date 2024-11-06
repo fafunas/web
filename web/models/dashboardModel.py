@@ -1,11 +1,11 @@
 import reflex as rx
 
-class ProductType(rx.Base):
+class ProductType(rx.Model):
     quantity: int
     price: float 
     name: str
 
-class OrderType(rx.Base):
+class OrderType(rx.Model):
     id: str
     orders_num: int
     total: float

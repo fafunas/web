@@ -45,7 +45,7 @@ BASE_STYLE = {
         "height": "100%",
         "padding": Size.SMALL.value,
         "border_radius": Size.DEFAULT.value,
-        "color": TextColor.HEADER.value,
+        "color": TextColor.BODY.value,
         "background_color": Color.CONTENT.value,
         "white_space": "normal",
         "text_align": "start",

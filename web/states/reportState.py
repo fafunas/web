@@ -4,14 +4,11 @@ from ..services.reportServcices import getAllOrdersServices
 
 
 class ReportState(rx.State):
-    data : list[OrderType]=[]
-    
-    
-    
+    data : list[dict]=[]
     
     @rx.background
-    async def onload(self):
+    async def fillTable(self,datatime):
         async with self:
-            self.data=getAllOrdersServices()
-           # print(self.data)
+            self.data=getAllOrdersServices(datatime)
+            
         
