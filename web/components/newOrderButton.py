@@ -63,7 +63,7 @@ def orderForm() -> rx.Component:
                 margin_bottom="24px",
             ),
             rx.text(
-                f"$ {DashboardState.order_data.total}",
+                f"Total a abonar: $ {DashboardState.order_data.total}",
                 size="2",
                 margin_bottom="4px",
                 weight="bold"

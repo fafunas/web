@@ -46,9 +46,8 @@ class DashboardState(rx.State):
     async def closeShift(self):
         async with self:
             endShiftServices()
-            #print(getUnfinishdOrders())
             self.shift_status=False
-            #self.statusCards = getDataCard()
+           
    
             
     @rx.background
