@@ -1,6 +1,9 @@
 from ..config.db import db_client
 from ..schemas.reportSchema import reports_schema
 from datetime import datetime,UTC,timedelta
+import pandas as pd
+import reflex as rx
+import os
 
 def getAllOrdersServices(dates):
     fromdate= datetime.strptime(dates["from"],'%Y-%m-%d').replace(tzinfo=UTC)
@@ -56,3 +59,89 @@ def getAllOrdersServices(dates):
     except BaseException as be:
         print(be)
     return orders
+
+
+
+def export_orders_to_excel(data, output_file='ordenes_reporte.xlsx'):
+    """
+    Exporta los datos de órdenes a un archivo Excel en la carpeta assets con formato.
+    
+    Args:
+        data (list): Lista de diccionarios con los datos de las órdenes
+        output_file (str): Nombre del archivo Excel de salida (default: 'ordenes_reporte.xlsx')
+    """
+    # Asegurarse de que el archivo se guarda en la carpeta `assets`
+    assets_path = rx.get_upload_dir()
+    if not os.path.exists(assets_path):
+        os.makedirs(assets_path)
+    output_file_path = os.path.join(assets_path, output_file)
+
+    # Convertir la lista de diccionarios a DataFrame
+    df = pd.DataFrame(data)
+    
+    # Convertir la columna created_at a datetime
+    df['created_at'] = pd.to_datetime(df['created_at'])
+    
+    # Convertir las columnas de precio y total a números, removiendo el símbolo '$'
+    df['price'] = df['price'].str.replace('$', '').str.replace(',', '').astype(float)
+    df['total'] = df['total'].str.replace('$', '').str.replace(',', '').astype(float)
+    
+    # Crear un archivo Excel con ExcelWriter para poder dar formato
+    with pd.ExcelWriter(output_file_path, engine='xlsxwriter') as writer:
+        # Guardar el DataFrame en la hoja 'Ordenes'
+        df.to_excel(writer, sheet_name='Ordenes', index=False)
+        
+        # Obtener el libro de trabajo y la hoja para dar formato
+        workbook = writer.book
+        worksheet = writer.sheets['Ordenes']
+        
+        # Definir formatos
+        formato_fecha = workbook.add_format({
+            'num_format': 'yyyy-mm-dd hh:mm',
+            'align': 'center'
+        })
+        
+        formato_numero = workbook.add_format({
+            'num_format': '$#,##0.00',
+            'align': 'right'
+        })
+        
+        formato_header = workbook.add_format({
+            'bold': True,
+            'bg_color': '#D8E4BC',
+            'border': 1,
+            'align': 'center'
+        })
+        
+        # Aplicar formatos a las columnas
+        worksheet.set_column('A:A', 18, formato_fecha)  # created_at
+        worksheet.set_column('B:B', 8)   # shift
+        worksheet.set_column('C:C', 8)   # order
+        worksheet.set_column('D:D', 15)  # name
+        worksheet.set_column('E:E', 10)  # quantity
+        worksheet.set_column('F:G', 12, formato_numero)  # price y total
+        
+        # Aplicar formato al encabezado
+        for col_num, value in enumerate(df.columns.values):
+            worksheet.write(0, col_num, value, formato_header)
+        
+        # Agregar filtros
+        worksheet.autofilter(0, 0, len(df), len(df.columns) - 1)
+        
+        # Agregar una hoja de resumen
+        summary_df = pd.DataFrame([
+            {'Métrica': 'Total de Órdenes', 'Valor': df['order'].nunique()},
+            {'Métrica': 'Total de Productos Vendidos', 'Valor': df['quantity'].sum()},
+            {'Métrica': 'Venta Total', 'Valor': df['total'].sum()},
+            {'Métrica': 'Producto Más Vendido', 'Valor': df.groupby('name')['quantity'].sum().idxmax()},
+            {'Métrica': 'Número de Turnos', 'Valor': df['shift'].nunique()}
+        ])
+        
+        summary_df.to_excel(writer, sheet_name='Resumen', index=False)
+        summary_worksheet = writer.sheets['Resumen']
+        
+        # Dar formato a la hoja de resumen
+        summary_worksheet.set_column('A:A', 25)
+        summary_worksheet.set_column('B:B', 15, formato_numero)
+
+    return output_file_path

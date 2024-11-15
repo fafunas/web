@@ -21,7 +21,12 @@ def SearchDate()->rx.Component:
                 rx.button(
                     "Buscar",
                     type="submit"
-                )
+                ),
+                rx.button(
+                    "Exportar",
+                    on_click=rx.download(
+                        url=rx.get_upload_url("ordenes_reporte.xlsx"),
+                        ))
                 
             ),
             on_submit=ReportState.fillTable

@@ -1,6 +1,6 @@
 import reflex as rx
 from ..models.dashboardModel import OrderType
-from ..services.reportServcices import getAllOrdersServices
+from ..services.reportServcices import getAllOrdersServices, export_orders_to_excel
 
 
 class ReportState(rx.State):
@@ -10,5 +10,4 @@ class ReportState(rx.State):
     async def fillTable(self,datatime):
         async with self:
             self.data=getAllOrdersServices(datatime)
-            
-        
+            export_orders_to_excel(self.data)
