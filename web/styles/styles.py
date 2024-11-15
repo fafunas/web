@@ -12,6 +12,7 @@ class Size(Enum):
     LARGE = "1.5em"
     BIG = "2em"
     VERY_BIG = "4em"
+    EXTRA_BIG= "6em"
 
 
 class Spacing(Enum):

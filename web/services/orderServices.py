@@ -68,7 +68,7 @@ def createOrderServices(item:Order):
         print(be)
         
 
-def getAllOrdersServices():
+async def getAllOrdersServices():
     query = [
     {
         '$match': {

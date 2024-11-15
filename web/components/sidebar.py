@@ -3,7 +3,7 @@ from ..styles.colors import Color
 
 
 def sidebar_item(
-    text: str, icon: str, href: str
+    text: str, icon: str, href: str, target: str ="_self"
 ) -> rx.Component:
     return rx.link(
         rx.hstack(
@@ -22,6 +22,7 @@ def sidebar_item(
             },
         ),
         href=href,
+        target=target,
         underline="none",
         weight="medium",
         width="100%",
@@ -33,7 +34,7 @@ def sidebar_items() -> rx.Component:
         sidebar_item("Dashboard", "layout-dashboard", "/#"),
         sidebar_item("Productos", "package-search", "/products"),
         sidebar_item("Informes", "book-text", "/reports"),
-        sidebar_item("Panel espera", "square-arrow-out-up-right", "/#"),
+        sidebar_item("Panel espera", "square-arrow-out-up-right", "/waitinglist","_blank"),
         spacing="1",
         width="100%",
     )
@@ -57,15 +58,10 @@ def sidebar() -> rx.Component:
                 ),
                 sidebar_items(),
                 spacing="5",
-                # position="fixed",
-                # left="0px",
-                # top="0px",
-                # z_index="5",
                 padding_x="1em",
                 padding_y="1.5em",
                 bg=Color.PRIMARY,
                 align="start",
-                # height="100%",
                 height="100vh",
                 width="16em",
             ),

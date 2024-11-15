@@ -9,14 +9,14 @@ class ProductState(rx.State):
     products: list[Products] = []
     error: str = ""
     
-    @rx.background
+    @rx.event(background=True)
     async def get_all_products(self): #Recupero los productos y los meto en una variable en el estado
         async with self:
             self.products = getAllProductsServices()
             
             
     
-    @rx.background
+    @rx.event(background=True)
     async def createProduct(self, data={}): #Este data viene del formulario
         async with self:
             try:
@@ -26,7 +26,7 @@ class ProductState(rx.State):
                 self.error = be
                 print(be)
                 
-    @rx.background
+    @rx.event(background=True)
     async def updateProduct(self,data={}):
         async with self:
             try:
@@ -35,7 +35,7 @@ class ProductState(rx.State):
             except BaseException as be:
                 print(be)   
                 
-    @rx.background
+    @rx.event(background=True)
     async def deleteProduct(self,data={}):
         async with self:
             try:

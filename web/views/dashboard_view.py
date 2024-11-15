@@ -41,7 +41,7 @@ def dashboard(products:Products)-> rx.Component:
                 spacing="2",
             ),
             # Ajustes de margenes y alineación de los elementos en vertical
-            spacing="2em",
+            spacing="2",
             align="start",
             width="100%",
             padding="2em"
