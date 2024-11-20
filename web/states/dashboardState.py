@@ -13,7 +13,7 @@ class DashboardState(rx.State):
     shift_status:bool 
     products: list[Products] = []
     orderTable: list[Order] = []
-    order_data: dict = {}
+    order_data: Order = []
     openedDialog: bool = False
     productconfirm: list[dict]=[]
     statusCards: dict={}
