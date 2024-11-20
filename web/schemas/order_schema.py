@@ -1,13 +1,14 @@
 def orderSchema(order)->dict: #Usamos este esquema solo para visualizar la tabla principal
     return{
         "id" : str(order["_id"]),
-        "orders_num":order["nro_order"],
+        "nro_order":order["nro_order"],
         "total": order["total"],
         "shift": order["shift_num"][0],
         "created_at": order["created_at"],
         "finish_time" : order["finish_time"],
         "pickUp_time": order["pickUp_time"],
-        "productos": process_products(order["productos"])      
+        "productos": process_products(order["productos"]),
+        "observation": order["observation"]      
     }
     
 

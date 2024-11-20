@@ -4,9 +4,9 @@ def getNumOrdersServices(items)->list:
     #print(items)
     for item in items:
         if item['finish_time'] is not None:
-            retirar.append(item['orders_num'])
+            retirar.append(item['nro_order'])
         else:
-            prep.append(item['orders_num'])
+            prep.append(item['nro_order'])
     return [prep,retirar]
 
     

@@ -6,7 +6,7 @@ from .shiftServices import lastShift, updateOrderNum
 
 
 #Funcion para armar los items que se reciben por el formulario
-def cleanData(data={}):
+def cleanData(data={})->Order:
     try:
         # Crear un diccionario para almacenar los precios
         prices = {}
@@ -47,25 +47,35 @@ def cleanData(data={}):
         newOrder = Order(total=total, productos=objects)
         return newOrder
     except BaseException as be:
-        print(be)
+        print("Error de cleand Data",be)
         
         return []
     
 
 
-def createOrderServices(item:Order):
+def createOrderServices(item:Order,obs:str):
     shift = lastShift()
-    order_num = int(shift["orders"])
+    item.observation=obs
+    nro_order = int(shift["orders"])
     item.shift_num=ObjectId(shift["_id"])
-    item.nro_order= order_num
+    item.nro_order= nro_order
+    productdict= [
+        {
+            "quantity": producto.quantity, 
+            "price": producto.price, 
+            "name": producto.name,
+            "product": producto.product
+        } for producto in item.productos
+    ]
     newOrder = dict(item)
+    newOrder["productos"]=productdict
     del newOrder["id"]
     try:
         uid= db_client.orders.insert_one(newOrder).inserted_id
         print(f"Se ingreso correctamente con el id{uid}")
         updateOrderNum()# Si se agrega la order incremento
     except BaseException as be:
-        print(be)
+        print("Error de Create",be)
         
 
 async def getAllOrdersServices():

@@ -62,6 +62,11 @@ def orderForm() -> rx.Component:
                 margin_top="24px",
                 margin_bottom="24px",
             ),
+            rx.input(placeholder="Observaciones",
+                     value=DashboardState.observation,
+                     on_change=DashboardState.setobs,
+                     margin="15px"),
+            
             rx.text(
                 f"Total a abonar: $ {DashboardState.order_data.total}",
                 size="2",

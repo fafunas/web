@@ -1,5 +1,4 @@
 import reflex as rx
-from ..models.dashboardModel import OrderType
 from ..services.reportServcices import getAllOrdersServices, export_orders_to_excel
 
 

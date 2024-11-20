@@ -15,8 +15,8 @@ class LocalState(rx.State):
             
     @rx.var(cache=True)
     def enprep(self)->list:
-        return self.get_value(json.loads(self.lsprep))
+        return list(self.get_value(json.loads(self.lsprep)))
             
     @rx.var(cache=True)
     def ready(self)->list:
-        return self.get_value(json.loads(self.lsret))
+        return list(self.get_value(json.loads(self.lsret)))

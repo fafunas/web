@@ -4,7 +4,7 @@ from ..services.productServices import getAllProductsServices
 from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
 from ..services.waitinglistservices import getNumOrdersServices
 from ..models.product_model import Products
-from ..models.dashboardModel import OrderType
+from ..models.order_model import Order
 from ..states.LocalState import LocalState
 import json
 
@@ -12,11 +12,16 @@ import json
 class DashboardState(rx.State):
     shift_status:bool 
     products: list[Products] = []
-    orderTable: list[OrderType] = []
+    orderTable: list[Order] = []
     order_data: dict = {}
     openedDialog: bool = False
     productconfirm: list[dict]=[]
     statusCards: dict={}
+    observation: str=""
+    
+    
+    def setobs(self,val):
+        self.observation=val  
     
     
     def closeDialog(self):
@@ -39,10 +44,11 @@ class DashboardState(rx.State):
     @rx.event(background=True)
     async def createOrder(self):
         async with self:
-            createOrderServices(self.order_data)
+            createOrderServices(self.order_data,self.observation)
             self.openedDialog = False
             self.orderTable= await getAllOrdersServices()
             self.statusCards = getDataCard()
+            self.observation=""
             await self.waitingOrders()
             
     
