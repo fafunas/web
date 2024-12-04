@@ -3,6 +3,7 @@ from ..services.shiftServices import startShiftServices, endShiftServices,checkO
 from ..services.productServices import getAllProductsServices
 from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
 from ..services.waitinglistservices import getNumOrdersServices
+from ..services.printer import print_thermal_ticket
 from ..models.product_model import Products
 from ..models.order_model import Order
 from ..states.LocalState import LocalState
@@ -19,6 +20,9 @@ class DashboardState(rx.State):
     statusCards: dict={}
     observation: str=""
     
+    def test(self,item):
+        t = Order(nro_order=item["nro_order"],total=item["total"],productos=item["productos"],observation=item["observation"],created_at=item["created_at"])
+        print_thermal_ticket(t,t.observation)
     
     def setobs(self,val):
         self.observation=val  
@@ -45,6 +49,8 @@ class DashboardState(rx.State):
     async def createOrder(self):
         async with self:
             createOrderServices(self.order_data,self.observation)
+            print_thermal_ticket(self.order_data,self.observation)
+            print_thermal_ticket(self.order_data,self.observation)
             self.openedDialog = False
             self.orderTable= await getAllOrdersServices()
             self.statusCards = getDataCard()

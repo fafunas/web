@@ -63,6 +63,8 @@ def show_order(order: Order) -> rx.Component:
         rx.table.cell(f"${order.total}"),
         rx.table.cell(
             rx.hstack(
+                rx.icon_button("printer",
+                               on_click=lambda: DashboardState.test(order)),
                 rx.icon_button(
                     "check",
                     color="white",
