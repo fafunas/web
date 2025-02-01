@@ -4,6 +4,7 @@ from ..services.productServices import getAllProductsServices
 from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
 from ..services.waitinglistservices import getNumOrdersServices
 from ..services.printer import print_thermal_ticket
+from ..services.Websocket import print_raw
 from ..models.product_model import Products
 from ..models.order_model import Order
 from ..states.LocalState import LocalState
@@ -22,7 +23,8 @@ class DashboardState(rx.State):
     
     def test(self,item):
         t = Order(nro_order=item["nro_order"],total=item["total"],productos=item["productos"],observation=item["observation"],created_at=item["created_at"])
-        print_thermal_ticket(t,t.observation)
+        base64=print_thermal_ticket(t,t.observation)
+        print_raw(base64)
     
     def setobs(self,val):
         self.observation=val  
@@ -48,9 +50,11 @@ class DashboardState(rx.State):
     @rx.event(background=True)
     async def createOrder(self):
         async with self:
-            createOrderServices(self.order_data,self.observation)
-            print_thermal_ticket(self.order_data,self.observation)
-            print_thermal_ticket(self.order_data,self.observation)
+            createOrderServices(self.order_data, self.observation)
+            base64 = print_thermal_ticket(self.order_data, self.observation)
+            print_raw(base64)
+            print_raw(base64)            
+           # print_thermal_ticket(self.order_data,self.observation)
             self.openedDialog = False
             self.orderTable= await getAllOrdersServices()
             self.statusCards = getDataCard()

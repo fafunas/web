@@ -1,7 +1,6 @@
 import reflex as rx
 from web.components.sidebar import sidebar
 from web.components.product_button import product_button
-from ..components.callout import notification
 from ..views.table import product_table
 from ..states.productState import ProductState
 from ..styles.fonts import Font

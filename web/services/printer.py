@@ -1,94 +1,54 @@
-import win32print
-import win32ui
-import win32con
+
 import textwrap
+from datetime import datetime
+import base64
 from ..models.order_model import Order
 
-def print_thermal_ticket(item: Order, obs: str):
-   try:
-       # Obtener nombre de impresora predeterminada
-       printer_name = win32print.GetDefaultPrinter()
-       hPrinter = win32print.OpenPrinter(printer_name)
 
-       # Iniciar trabajo de impresión
-       hDC = win32ui.CreateDC()
-       hDC.CreatePrinterDC(printer_name)
+def print_thermal_ticket(item: Order, obs: str) -> str:
+    try:
+        # Crear el contenido del ticket como un string
+        ticket_lines = []
 
-       try:
-           hDC.StartDoc("Ticket Térmico")
-           hDC.StartPage()
+        # Comando ESC POS para texto grande (doble altura y doble ancho)
+        esc_pos_double_size = "\x1b!\x30"
 
-           # Configurar fuentes
-           # Fuente para número de ticket (grande)
-           ticket_number_font = win32ui.CreateFont({
-               "name": "Segoe UI",
-               "height": 160,
-               "weight": win32con.FW_BOLD,
-               
-           })
+        # Encabezado del ticket (número de ticket centrado y grande)
+        ticket_lines.append(esc_pos_double_size)
+        ticket_lines.append(f"{item.nro_order}".center(40, " "))
+        ticket_lines.append("\x1b!\x00")  # Volver al tamaño normal
+        ticket_lines.append("=" * 40)
 
-           # Fuente para texto normal
-           normal_font = win32ui.CreateFont({
-               "name": "Segoe UI",
-               "height": 35,
-               "weight": win32con.FW_NORMAL,
-               
-           })
+        # Fecha del ticket
+        formatted_date = item.created_at.strftime("%d/%m/%Y %H:%M:%S") if isinstance(item.created_at, datetime) else str(item.created_at)
+        ticket_lines.append(f"Fecha: {formatted_date}")
+        ticket_lines.append("-" * 40)
 
-           # Calcular posiciones
-           y = 20
-           x = 50
-           line_height = 45
-           printer_width = 580  # Ancho aproximado de impresora térmica
+        # Productos
+        ticket_lines.append("Productos:")
+        for producto in item.productos:
+            product_text = f"{producto.name} - Cantidad: {producto.quantity}"
+            ticket_lines.append(product_text)
 
-           # Imprimir número de ticket centrado y grande
-           hDC.SelectObject(ticket_number_font)
-           ticket_text = f"{item.nro_order}"
-           text_width = hDC.GetTextExtent(ticket_text)[0]
-           centered_x = (printer_width - text_width) // 2
-           hDC.TextOut(centered_x, y, ticket_text)
-           y += 170
-           
-           # Cambiar a fuente normal
-           hDC.SelectObject(normal_font)
+        ticket_lines.append("-" * 40)
 
-           # Imprimir fecha
-           hDC.TextOut(x, y, f"Fecha: {item.created_at}")
-           y += line_height
+        # Observaciones
+        ticket_lines.append("Observaciones:")
+        wrapped_obs = textwrap.wrap(obs, width=38)  # Ajustar ancho para impresión
+        ticket_lines.extend(wrapped_obs)
 
-           # Imprimir productos
-           hDC.TextOut(x, y, "Productos:")
-           y += line_height
-           for producto in item.productos:
-               product_text = f"{producto.name} - Cantidad: {producto.quantity}"
-               hDC.TextOut(x + 50, y, product_text)
-               y += line_height
+        ticket_lines.append("=" * 40)
 
-           # Imprimir observaciones con wrap
-           hDC.TextOut(x, y, "Observaciones:")
-           y += line_height
-           
-           # Dividir observaciones en líneas
-           wrapped_obs = textwrap.wrap(obs, width=40)
-           for obs_line in wrapped_obs:
-               hDC.TextOut(x + 50, y, obs_line)
-               y += line_height
+        # Feed del papel al final (3 líneas en blanco usando ESC POS)
+        ticket_lines.append("\n\n\n\x1b\x64\x03")
 
-           win32print.StartDocPrinter(hPrinter, 1, ("Ticket", None, "RAW"))
-           win32print.WritePrinter(hPrinter, b"\x1B\x64\x03")
-           win32print.WritePrinter(hPrinter, b"\x1B\x64\x03")
-           win32print.WritePrinter(hPrinter, b"\x1D\x56\x01")
+        # Combinar todas las líneas en un solo string con saltos de línea
+        ticket_content = "\n".join(ticket_lines)
 
-           # Finalizar impresión
-           hDC.EndPage()
-           hDC.EndDoc()
+        # Convertir el contenido del ticket a base64
+        ticket_base64 = base64.b64encode(ticket_content.encode("utf-8")).decode("utf-8")
 
-       except Exception as print_error:
-           print(f"Error durante la impresión: {print_error}")
-
-       finally:
-           # Cerrar impresora
-           win32print.ClosePrinter(hPrinter)
-
-   except Exception as main_error:
-       print(f"Error general: {main_error}")
+        return ticket_base64
+    except Exception as error:
+        print(f"Error al generar el ticket: {error}")
+        return ""
