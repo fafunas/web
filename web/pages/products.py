@@ -26,8 +26,9 @@ def products()-> rx.Component:
                            font_size=Size.BIG,
                            margin=Size.MEDIUM)
             ),
-            product_button(),
-            product_table(ProductState.products),
+            rx.hstack(product_button(),
+            product_table(ProductState.products),),
+            
             spacing="5",
         ),
             
