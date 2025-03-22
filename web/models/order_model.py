@@ -22,3 +22,4 @@ class Order(rx.Model):
     shift_num: Optional[ObjectId]=None
     nro_order: Optional[int] = Field(default=1)
     observation: Optional[str]
+    payment: Optional[str]

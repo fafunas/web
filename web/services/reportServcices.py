@@ -49,13 +49,15 @@ def getAllOrdersServices(dates):
             }, 
             'nro_order': '$nro_order', 
             'created_at': '$created_at', 
-            'shift_num': '$shift_num'
+            'shift_num': '$shift_num',
+            'payment': '$payment'
         }
     }
 ]
     
     try:
         orders = reports_schema(db_client.orders.aggregate(query))
+        
     except BaseException as be:
         print(be)
     return orders

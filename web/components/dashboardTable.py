@@ -30,10 +30,14 @@ def dashboardTable(order) -> rx.Component:
 def show_product(product: ProductType) -> rx.Component:
     return rx.hstack(
         rx.text(product.quantity),
-        rx.spacer(),
+       # rx.spacer(),
         rx.text(product.name),
         rx.spacer(),
-        rx.text(f"${product.price}"),
+        rx.flex(
+            rx.text(f"${product.price}",align="center"),
+            
+        )
+        
     )
 
 
@@ -57,7 +61,8 @@ def show_order(order: Order) -> rx.Component:
                 ),
             )
         ),
-        rx.table.cell(rx.foreach(order.productos, show_product)),
+        rx.table.cell(rx.foreach(order.productos, show_product),
+                      align="left"),
         rx.table.cell(order.created_at),
         rx.table.cell(order.finish_time),
         rx.table.cell(f"${order.total}"),

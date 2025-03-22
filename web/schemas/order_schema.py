@@ -8,7 +8,8 @@ def orderSchema(order)->dict: #Usamos este esquema solo para visualizar la tabla
         "finish_time" : order["finish_time"],
         "pickUp_time": order["pickUp_time"],
         "productos": process_products(order["productos"]),
-        "observation": order["observation"]      
+        "observation": order["observation"],
+        "payment": order["payment"]     
     }
     
 
