@@ -51,7 +51,13 @@ def cleanData(data={})->Order:
         
         return []
     
-
+def deleteOrderServices(id):
+    uid = ObjectId(id)
+    try:
+        db_client.orders.delete_one({"_id":uid})
+        print("Se elimino correctamente")
+    except BaseException as be:
+        print("Error de Delete",be)
 
 def createOrderServices(item:Order,obs:str,payment:str):
     shift = lastShift()

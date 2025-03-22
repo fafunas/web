@@ -115,6 +115,7 @@ def export_orders_to_excel(data, output_file='ordenes_reporte.xlsx'):
             'align': 'center'
         })
         
+        df.columns=["Fecha","Turno","Orden","Producto","Cantidad","Precio","Total","Forma de Pago"]
         # Aplicar formatos a las columnas
         worksheet.set_column('A:A', 18, formato_fecha)  # created_at
         worksheet.set_column('B:B', 8)   # shift
@@ -122,6 +123,7 @@ def export_orders_to_excel(data, output_file='ordenes_reporte.xlsx'):
         worksheet.set_column('D:D', 15)  # name
         worksheet.set_column('E:E', 10)  # quantity
         worksheet.set_column('F:G', 12, formato_numero)  # price y total
+        worksheet.set_column('H:H', 17) # Payment
         
         # Aplicar formato al encabezado
         for col_num, value in enumerate(df.columns.values):
@@ -130,20 +132,6 @@ def export_orders_to_excel(data, output_file='ordenes_reporte.xlsx'):
         # Agregar filtros
         worksheet.autofilter(0, 0, len(df), len(df.columns) - 1)
         
-        # Agregar una hoja de resumen
-        summary_df = pd.DataFrame([
-            {'Métrica': 'Total de Órdenes', 'Valor': df['order'].nunique()},
-            {'Métrica': 'Total de Productos Vendidos', 'Valor': df['quantity'].sum()},
-            {'Métrica': 'Venta Total', 'Valor': df['total'].sum()},
-            {'Métrica': 'Producto Más Vendido', 'Valor': df.groupby('name')['quantity'].sum().idxmax()},
-            {'Métrica': 'Número de Turnos', 'Valor': df['shift'].nunique()}
-        ])
         
-        summary_df.to_excel(writer, sheet_name='Resumen', index=False)
-        summary_worksheet = writer.sheets['Resumen']
-        
-        # Dar formato a la hoja de resumen
-        summary_worksheet.set_column('A:A', 25)
-        summary_worksheet.set_column('B:B', 15, formato_numero)
 
     return output_file_path

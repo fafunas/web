@@ -1,7 +1,7 @@
 import reflex as rx
 from ..services.shiftServices import startShiftServices, endShiftServices,checkOpenShiftStatusService, getUnfinishdOrders
 from ..services.productServices import getAllProductsServices
-from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard
+from ..services.orderServices import cleanData, createOrderServices,getAllOrdersServices, updateFinishtime, getDataCard, deleteOrderServices
 from ..services.waitinglistservices import getNumOrdersServices
 from ..services.printer import print_thermal_ticket
 from ..services.Websocket import print_raw
@@ -51,6 +51,14 @@ class DashboardState(rx.State):
         local_state.lsprep= json.dumps(ordenes[0])
         local_state.lsret= json.dumps(ordenes[1])
         
+    
+    @rx.event(background=True)
+    async def deleteItem(self,id):
+        async with self:
+            deleteOrderServices(id)
+            self.orderTable= await getAllOrdersServices()
+            self.statusCards = getDataCard()
+            await self.waitingOrders()
          
     @rx.event(background=True)
     async def createOrder(self):

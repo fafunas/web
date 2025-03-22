@@ -30,14 +30,12 @@ def dashboardTable(order) -> rx.Component:
 def show_product(product: ProductType) -> rx.Component:
     return rx.hstack(
         rx.text(product.quantity),
-       # rx.spacer(),
+        # rx.spacer(),
         rx.text(product.name),
         rx.spacer(),
         rx.flex(
-            rx.text(f"${product.price}",align="center"),
-            
-        )
-        
+            rx.text(f"${product.price}", align="center"),
+        ),
     )
 
 
@@ -61,35 +59,50 @@ def show_order(order: Order) -> rx.Component:
                 ),
             )
         ),
-        rx.table.cell(rx.foreach(order.productos, show_product),
-                      align="left"),
+        rx.table.cell(rx.foreach(order.productos, show_product), align="left"),
         rx.table.cell(order.created_at),
         rx.table.cell(order.finish_time),
         rx.table.cell(f"${order.total}"),
         rx.table.cell(
             rx.hstack(
-                rx.icon_button("printer",
-                               on_click=lambda: DashboardState.test(order)),
-                rx.icon_button(
-                    "check",
-                    color="white",
-                    background_color="green",
-                    padding="0.5em",
-                    border="1px solid black",
-                    on_click=lambda: DashboardState.UpdateItem(order.id, "finish_time"),
+                rx.icon_button("printer", on_click=lambda: DashboardState.test(order)),
+                rx.cond(
+                    order.finish_time == None,
+                    rx.icon_button(
+                        "check",
+                        color="white",
+                        background_color="green",
+                        padding="0.5em",
+                        border="1px solid black",
+                        on_click=lambda: DashboardState.UpdateItem(
+                            order.id, "finish_time"
+                        ),
+                    ),
                 ),
                 rx.cond(
                     order.finish_time != None,
                     rx.icon_button(
                         "package-check",
                         color="white",
-                        background_color="red",
+                        background_color="grey",
                         padding="0.5em",
                         border="1px solid black",
                         on_click=lambda: DashboardState.UpdateItem(
                             order.id, "pickUp_time"
                         ),
                     ),
+                ),
+                rx.spacer(),
+                rx.button(
+                    rx.icon(tag="trash"),
+                    border_radius="50%",  
+                    color="white",
+                    background_color="red",
+                    padding="0.2em",
+                    border="1px solid black",
+                    on_click=lambda: DashboardState.deleteItem(order.id),
+                    aspect_ratio="1/1",  
+                    width="fit-content", 
                 ),
             )
         ),
