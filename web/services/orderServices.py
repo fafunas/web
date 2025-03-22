@@ -53,9 +53,10 @@ def cleanData(data={})->Order:
     
 
 
-def createOrderServices(item:Order,obs:str):
+def createOrderServices(item:Order,obs:str,payment:str):
     shift = lastShift()
     item.observation=obs
+    item.payment = payment
     nro_order = int(shift["orders"])
     item.shift_num=ObjectId(shift["_id"])
     item.nro_order= nro_order

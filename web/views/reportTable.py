@@ -36,4 +36,5 @@ column_defs = [
     ag_grid.column_def(field="quantity", header_name="Cantidad"),
     ag_grid.column_def(field="price", header_name="P. Unitario"),
     ag_grid.column_def(field="total", header_name="Total"),
+    ag_grid.column_def(field="payment", header_name="Forma de Pago"),
 ]

@@ -8,6 +8,8 @@ from ..models.product_model import Products
 
 #Recupero todos los productos de la base
 def getAllProductsServices():
+   # orders = db_client["orders"] Tuve que agregar un campo que me pidieron a ultima hora
+   # orders.update_many({}, {"$set": {"payment": "Efectivo"}})
     product = db_client.products.find()
     return products_schema(product)
 

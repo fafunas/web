@@ -10,6 +10,7 @@ def reportSchema(order)->dict: #Usamos este esquema solo para visualizar la tabl
         "quantity": order["quantity"],
         "price" : f"${order["precio_unitario"]}",
         "total": f"${order["total"]}",
+        "payment": order["payment"]
               
     }
     

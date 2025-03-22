@@ -36,9 +36,20 @@ def orderForm() -> rx.Component:
         rx.dialog.content(
             rx.dialog.title("Resumen de Orden"),
             rx.dialog.description(
-                "Favor de confirmar la order",
-                size="2",
-                margin_bottom="16px"
+                rx.hstack(
+                    rx.text("Favor de confirmar la orden"),
+                    rx.spacer(),
+                    rx.radio(
+                        ["Efectivo", "Tarjeta"],
+                        direction="column",
+                        default_value="Efectivo",
+                        value=DashboardState.payment,
+                        on_change=DashboardState.setPayment
+                    )
+                )
+                
+              #  size="2",
+              #  margin_bottom="16px"
             ),
             rx.inset(
                 rx.table.root(
